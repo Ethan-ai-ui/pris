@@ -3,137 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>I Love You ❤️</title>
+  <title>ILoveYouPriscilla</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      height: 100vh;
-      background: linear-gradient(to right, #ffdde1, #ee9ca7);
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .container {
-      text-align: center;
-      color: #fff;
-      z-index: 2;
+      padding: 40px 20px;
+      color: #333;
     }
 
     h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 10px #ffb6c1;
-    }
-
-    .btn {
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      background: #fff;
-      color: #ff69b4;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    .btn:hover {
-      background: #ff69b4;
+      font-size: 2.5rem;
       color: #fff;
-      transform: scale(1.1);
+      text-shadow: 1px 1px 8px #ff69b4;
+      margin-bottom: 5px;
+      text-align: center;
     }
 
-    .message {
-      margin-top: 30px;
-      font-size: 1.5rem;
-      opacity: 0;
-      transition: opacity 1s ease;
+    .days {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
     }
 
-    .show {
-      opacity: 1;
+    .note-section {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
     }
 
-    /* Floating hearts */
-    .heart {
-      width: 20px;
-      height: 20px;
-      background: red;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      animation: float 5s linear infinite;
-      transform: translateX(-50%) rotate(45deg);
-      opacity: 0.6;
+    textarea {
+      width: 100%;
+      height: 180px;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 1rem;
+      resize: none;
+      background: #fdf2f8;
+      outline: none;
+      box-sizing: border-box;
     }
 
-    .heart::before,
-    .heart::after {
-      content: '';
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-      position: absolute;
+    button {
+      background: #ff69b4;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s ease;
     }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
+    button:hover {
+      background: #ff1493;
+      transform: scale(1.05);
     }
 
-    .heart::after {
-      left: -10px;
-      top: 0;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateX(-50%) translateY(0) rotate(45deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-50%) translateY(-110vh) rotate(45deg);
-        opacity: 0;
-      }
+    .status {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Hi Priscilla ❤️</h1>
-    <button class="btn" onclick="showLove()">Click Me!</button>
-    <p class="message" id="loveMessage">I just wanted to say... I Love You More Than Words Can Say 💖</p>
+  <h1>Hi Love,</h1>
+  <div class="days" id="daysTogether">Counting the days we've been together...</div>
+
+  <div class="note-section">
+    <h3>Write Me a Note 💌</h3>
+    <textarea id="noteArea" placeholder="Your message here..."></textarea>
+    <button onclick="sendNote()">Send</button>
+    <div class="status" id="statusMsg"></div>
   </div>
 
-  <!-- Floating hearts -->
   <script>
-    // Floating heart spawner
-    function spawnHearts() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 4 + Math.random() * 3 + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => {
-        heart.remove();
-      }, 7000);
-    }
-    setInterval(spawnHearts, 300);
+    // Calculate days since June 1
+    const startDate = new Date("2025-06-01");
+    const today = new Date();
+    const diffTime = today - startDate;
+    const daysTogether = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById("daysTogether").innerText =
+      `We've been together for  ${daysTogether} days 💕`;
 
-    // Love message display
-    function showLove() {
-      const message = document.getElementById("loveMessage");
-      message.classList.add("show");
+    // Send to Discord Webhook
+    function sendNote() {
+      const message = document.getElementById("noteArea").value.trim();
+      const status = document.getElementById("statusMsg");
+
+      if (!message) {
+        status.innerText = "Please write something lovely!";
+        status.style.color = "red";
+        return;
+      }
+
+      // Replace this with your Discord Webhook URL
+      const webhookURL = "https://discord.com/api/webhooks/1401210119626428530/fVSE2p4jkO0uITlspSvOVcbRP2tjIj2gozv6FF_G8gLaV5wrLNWGPJ97adIEjwG7Dvfs";
+
+      const data = {
+        username: "LoveNotes Bot 💌",
+        content: `💖 New message from your love:\n\n"${message}"`,
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => {
+        if (res.ok) {
+          status.innerText = "Message sent.";
+          status.style.color = "green";
+          document.getElementById("noteArea").value = "";
+        } else {
+          throw new Error("Discord failed");
+        }
+      })
+      .catch(() => {
+        status.innerText = "Oops! Message not sent.";
+        status.style.color = "red";
+      });
     }
   </script>
 </body>
